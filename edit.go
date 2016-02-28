@@ -22,7 +22,7 @@ const (
 // -----------------------------------------------------------------------------
 
 // Edit starts the user's favorite editor and returns the output.
-func Edit(prefix string) ([]byte, error) {
+func Edit(prefix string, templates ...string) ([]byte, error) {
 	editor := os.Getenv("EDITOR")
 	if editor == "" {
 		return nil, fmt.Errorf("$EDITOR isn't set")
@@ -32,7 +32,7 @@ func Edit(prefix string) ([]byte, error) {
 		return nil, err
 	}
 
-	f, err := ioutil.TempFile(os.TempDir(), fmt.Sprintf(".forward.%s-"))
+	f, err := ioutil.TempFile(os.TempDir(), fmt.Sprintf(".forward.%s-", prefix))
 	if err != nil {
 		return nil, err
 	}
@@ -40,6 +40,12 @@ func Edit(prefix string) ([]byte, error) {
 		// NOTE: file removal might fail, not much we can do though.
 		_ = os.Remove(f.Name())
 	}()
+
+	for _, t := range templates {
+		if _, err := f.WriteString(t); err != nil {
+			return nil, err
+		}
+	}
 
 	cmd := exec.Command(path, f.Name())
 	cmd.Stdin = os.Stdin
