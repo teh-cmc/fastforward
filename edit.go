@@ -9,6 +9,18 @@ import (
 
 // -----------------------------------------------------------------------------
 
+const (
+	templateIssue = `
+# Please enter the name and description of your issue, separated by an empty
+# line. Names longer than 80 characters will be truncated.
+#
+# Lines starting with '#' will be ignored, and an empty message aborts the
+# creation of an issue.
+`
+)
+
+// -----------------------------------------------------------------------------
+
 // Edit starts the user's favorite editor and returns the output.
 func Edit(prefix string) ([]byte, error) {
 	editor := os.Getenv("EDITOR")
