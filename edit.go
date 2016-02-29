@@ -1,22 +1,14 @@
 package forward
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
-)
-
-// -----------------------------------------------------------------------------
-
-const (
-	templateIssue = `
-# Please enter the name and description of your issue, separated by an empty
-# line. Names longer than 80 characters will be truncated.
-#
-# Lines starting with '#' will be ignored, and an empty message aborts the
-# creation of an issue.
-`
+	"strings"
 )
 
 // -----------------------------------------------------------------------------
@@ -32,13 +24,15 @@ func Edit(prefix string, templates ...string) ([]byte, error) {
 		return nil, err
 	}
 
-	f, err := ioutil.TempFile(os.TempDir(), fmt.Sprintf(".forward.%s-", prefix))
+	f, err := ioutil.TempFile(os.TempDir(), fmt.Sprintf("forward.%s-", prefix))
 	if err != nil {
 		return nil, err
 	}
 	defer func() {
 		// NOTE: file removal might fail, not much we can do though.
-		_ = os.Remove(f.Name())
+		if err := os.Remove(f.Name()); err != nil {
+			log.Println(err)
+		}
 	}()
 
 	for _, t := range templates {
@@ -55,5 +49,8 @@ func Edit(prefix string, templates ...string) ([]byte, error) {
 		return nil, err
 	}
 
+	if _, err := f.Seek(0, 0); err != nil {
+		return nil, err
+	}
 	return ioutil.ReadAll(f)
 }
