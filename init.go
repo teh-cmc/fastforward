@@ -21,9 +21,6 @@ const TemplateInit = `
 // -----------------------------------------------------------------------------
 
 // Init implements the `fwd init` command.
-//
-// It initializes a new git repository at the specified `path` and does the
-// initial commit (name and description of the project).
 func Init(c *cli.Context) {
 	// get directory
 	dir := "." // NOTE: `dir` defaults to current directory

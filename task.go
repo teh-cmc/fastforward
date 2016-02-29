@@ -21,9 +21,6 @@ const TemplateTaskNew = `
 // -----------------------------------------------------------------------------
 
 // TaskNew implements the `fwd task new` command.
-//
-// It initializes a new git repository at the specified `path` and creates the
-// Forward directory hierarchy.
 func TaskNew(c *cli.Context) {
 	// get title and description
 	t, d, err := TitleAndDescription(Edit("task-new", TemplateTaskNew))
