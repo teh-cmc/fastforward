@@ -36,6 +36,11 @@ func init() {
 					SkipFlagParsing: true,
 					Action:          func(c *cli.Context) { forward.TaskNew(c) },
 				},
+				{
+					Name:   "list",
+					Usage:  "lists tasks",
+					Action: func(c *cli.Context) { forward.TaskList(c) },
+				},
 			},
 		},
 	}
