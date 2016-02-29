@@ -40,23 +40,24 @@ func GitExec(cmd []string, input []byte) error {
 }
 
 func gitExecPiped(bin string, cmd []string, input []byte) error {
+	var err error
 	c := exec.Command(bin, cmd...)
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr
 	in, err := c.StdinPipe()
-	defer in.Close()
+	defer func() { _ = in.Close() }()
 	if err != nil {
 		return err
 	}
-	if err := c.Start(); err != nil {
+	if err = c.Start(); err != nil {
 		return err
 	}
 	_, err = in.Write(input)
 	if err != nil {
 		return err
 	}
-	in.Close()
-	if err := c.Wait(); err != nil {
+	_ = in.Close()
+	if err = c.Wait(); err != nil {
 		return err
 	}
 	return nil
