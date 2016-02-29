@@ -54,3 +54,30 @@ func Edit(prefix string, templates ...string) ([]byte, error) {
 	}
 	return ioutil.ReadAll(f)
 }
+
+// TitleAndDescription extracts the title and description from `b`.
+//
+// Example:
+//    t, d, err := TitleAndDescription(Edit("init", TemplateInit))
+func TitleAndDescription(b []byte, e error) (t string, d string, err error) {
+	if e != nil {
+		err = e
+		return
+	}
+
+	scanner := bufio.NewScanner(bytes.NewReader(b))
+	for scanner.Scan() {
+		txt := strings.TrimSpace(scanner.Text())
+		if strings.HasPrefix(txt, "#") || len(txt) == 0 {
+			continue
+		}
+		if t == "" {
+			t = txt
+			continue
+		}
+		d = txt
+		break
+	}
+	err = scanner.Err()
+	return
+}
