@@ -7,6 +7,24 @@ import (
 
 // -----------------------------------------------------------------------------
 
+// GitOutput runs the given git `cmd` and returns its output.
+func GitOutput(cmd []string) ([]byte, error) {
+	bin, err := exec.LookPath("git")
+	if err != nil {
+		return nil, err
+	}
+	return gitOutput(bin, cmd)
+}
+
+func gitOutput(bin string, cmd []string) ([]byte, error) {
+	c := exec.Command(bin, cmd...)
+	c.Stdin = os.Stdin
+	c.Stderr = os.Stderr
+	return c.Output()
+}
+
+// -----------------------------------------------------------------------------
+
 // GitExec runs the given git `cmd`.
 //
 // If `input` is non-nil, it is fed to git via a stdin pipe.
