@@ -20,11 +20,23 @@ func init() {
 	app.Commands = []cli.Command{
 		{
 			Name:            "init",
-			Aliases:         []string{"n"},
 			Usage:           "initializes a new Forward kanban repository",
 			ArgsUsage:       "<path> (defaults to current directory)",
 			SkipFlagParsing: true,
 			Action:          func(c *cli.Context) { forward.Init(c) },
+		},
+		{
+			Name:            "task",
+			Usage:           "task related sub-commands",
+			SkipFlagParsing: true,
+			Subcommands: []cli.Command{
+				{
+					Name:            "new",
+					Usage:           "creates a new task",
+					SkipFlagParsing: true,
+					Action:          func(c *cli.Context) { forward.TaskNew(c) },
+				},
+			},
 		},
 	}
 
