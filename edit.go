@@ -57,6 +57,8 @@ func Edit(prefix string, templates ...string) ([]byte, error) {
 
 // TitleAndDescription extracts the title and description from `b`.
 //
+// The title will be truncated if >80 characters.
+//
 // Example:
 //    t, d, err := TitleAndDescription(Edit("init", TemplateInit))
 func TitleAndDescription(b []byte, e error) (t string, d string, err error) {
@@ -73,6 +75,9 @@ func TitleAndDescription(b []byte, e error) (t string, d string, err error) {
 		}
 		if t == "" {
 			t = txt
+			if len(t) > 80 {
+				t = t[:80]
+			}
 			continue
 		}
 		d = txt
