@@ -1,6 +1,9 @@
 package main
 
-import "github.com/codegangsta/cli"
+import (
+	"github.com/codegangsta/cli"
+	"github.com/teh-cmc/forward"
+)
 
 // -----------------------------------------------------------------------------
 
@@ -12,12 +15,18 @@ func init() {
 	app.Name = "Forward"
 	app.HelpName = app.Name
 	app.Version = "0.0.1"
-	app.Usage = "Kanban-like tool built on git, designed to move fast."
+	app.Usage = "Kanban-like tool built on git, designed for small teams that need to move fast."
 
-	//app.HideHelp = true
-	app.HideVersion = true
-
-	app.Commands = []cli.Command{}
+	app.Commands = []cli.Command{
+		{
+			Name:            "init",
+			Aliases:         []string{"n"},
+			Usage:           "initializes a new Forward kanban repository",
+			ArgsUsage:       "<path> (defaults to current directory)",
+			SkipFlagParsing: true,
+			Action:          func(c *cli.Context) { forward.Init(c) },
+		},
+	}
 
 	app.Authors = []cli.Author{
 		{Name: "Clement 'cmc' Rey", Email: "cr.rey.clement@gmail.com"},
