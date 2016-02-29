@@ -11,8 +11,8 @@ import (
 
 // TemplateInit is the template for the `fwd init` command.
 const TemplateInit = `
-# Please enter the name and description of your new Forward project, separated
-# by an empty line. Names longer than 80 characters will be truncated.
+# Please enter the name and description (optional) of your new Forward project,
+# separated by an empty line. Names longer than 80 characters will be truncated.
 #
 # Lines starting with '#' will be ignored, and an empty message aborts the
 # creation of the Forward project.
