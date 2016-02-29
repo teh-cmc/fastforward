@@ -1,6 +1,7 @@
 package forward
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/codegangsta/cli"
@@ -34,7 +35,11 @@ func TaskNew(c *cli.Context) {
 	}
 
 	// add task:new commit
-	t = "[forward] task:new - " + t
+	tid, err := LatestTaskID()
+	if err != nil {
+		log.Fatal(err)
+	}
+	t = fmt.Sprintf("[forward] task:new - (#%d) %v", tid+1, t)
 	cmd := []string{"commit", "--allow-empty", "--file", "-"}
 	if err := GitExec(cmd, []byte(t+"\n\n"+d)); err != nil {
 		log.Fatal(err)
