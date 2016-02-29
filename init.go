@@ -22,8 +22,8 @@ const TemplateInit = `
 
 // Init implements the `fwd init` command.
 //
-// It initializes a new git repository at the specified `path` and creates the
-// Forward directory hierarchy.
+// It initializes a new git repository at the specified `path` and does the
+// initial commit (name and description of the project).
 func Init(c *cli.Context) {
 	// get directory
 	dir := "." // NOTE: `dir` defaults to current directory
@@ -51,8 +51,9 @@ func Init(c *cli.Context) {
 	}
 
 	// add init commit
+	t = "[forward] init - " + t
 	cmd := []string{"commit", "--allow-empty", "--file", "-"}
-	if err := GitExec(cmd, []byte(t+"\n"+d)); err != nil {
+	if err := GitExec(cmd, []byte(t+"\n\n"+d)); err != nil {
 		log.Fatal(err)
 	}
 }
