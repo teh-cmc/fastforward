@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-NAME=fwd
+NAME=ff
 SUBPACKAGES=$(shell go list ./... | grep -v /vendor/)
 
 help:
