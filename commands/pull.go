@@ -5,14 +5,20 @@ import "github.com/teh-cmc/fastforward/git"
 // -----------------------------------------------------------------------------
 
 // Pull implements the `ff pull` command.
-type Pull struct {
-	branch string
-}
+type Pull struct{}
 
 // NewPull returns a new Pull.
-func NewPull(branch string) *Pull { return &Pull{branch: branch} }
+func NewPull() *Pull { return &Pull{} }
 
 // -----------------------------------------------------------------------------
 
+// AllowAutoPulling always returns `false`.
+func (p Pull) AllowAutoPulling() bool { return false }
+
+// AllowAutoPushing always returns `false`.
+func (p Pull) AllowAutoPushing() bool { return false }
+
 // Pull implements the `ff pull` command.
-func (p Pull) Run() ([]byte, error) { return git.Run(git.NewPull(p.branch)) }
+func (p Pull) Run(branch string) ([]byte, error) {
+	return git.Run(git.NewPull(branch), branch)
+}
