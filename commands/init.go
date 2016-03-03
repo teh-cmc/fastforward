@@ -9,8 +9,6 @@ import (
 // -----------------------------------------------------------------------------
 
 // Init implements the `ff init` command.
-//
-// Init implements the `git.Command` interface.
 type Init struct {
 	branch string
 }
@@ -20,15 +18,9 @@ func NewInit(branch string) *Init { return &Init{branch: branch} }
 
 // -----------------------------------------------------------------------------
 
-// Template always returns `nil`.
-func (i Init) Template() []byte { return nil }
-
-// Command returns a command that creates a new git branch.
-func (i Init) Command() []string { return []string{"checkout", "-b", i.branch} }
-
-// Init implements the `fwd init` command.
+// Init implements the `ff init` command.
 func (i Init) Run() ([]byte, error) {
-	_, err := git.Run(i)
+	_, err := git.Run(git.NewCheckout(i.branch))
 	output := fmt.Sprintf("FastForward branch '%s' successfully initialized.", i.branch)
 	return []byte(output), err
 }
