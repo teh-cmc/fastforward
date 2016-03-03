@@ -18,6 +18,12 @@ func init() {
 	app.Usage = "Decentralized Kanban tool built upon git, designed for small teams that need to move fast."
 
 	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:   "branch, b",
+			Value:  "fastforward",
+			Usage:  "specifies the name of the branch used by FastForward",
+			EnvVar: "FF_BRANCH",
+		},
 		cli.BoolFlag{
 			Name:   "offline, o",
 			Usage:  "enables offline mode (diables auto-pulling & auto-pushing)",
