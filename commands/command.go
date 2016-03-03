@@ -1,68 +1,73 @@
 package commands
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/codegangsta/cli"
 )
 
 // -----------------------------------------------------------------------------
 
-// Command is an enum that represents every possible `ff` commands.
-type Command int
+// CommandType is an enum that represents available `ff` commands.
+type CommandType string
 
 const (
-	// CommandPull represents the `ff pull` command.
-	CommandPull Command = iota
-	// CommandPush represents the `ff push` command.
-	CommandPush Command = iota
-	// CommandInit represents the `ff init` command.
-	CommandInit Command = iota
+	// CommandTypePull represents the `ff pull` command.
+	CommandTypePull CommandType = "pull"
+	// CommandTypePush represents the `ff push` command.
+	CommandTypePush CommandType = "push"
+	// CommandTypeInit represents the `ff init` command.
+	CommandTypeInit CommandType = "init"
+	// CommandTypeTaskNew represents the `ff task new` command.
+	CommandTypeTaskNew CommandType = "task:new"
+	// CommandTypeTaskList represents the `ff task list` command.
+	CommandTypeTaskList CommandType = "task:list"
 )
+
+// Command exposes methods to run a `ff` command.
+type Command interface {
+	AllowAutoPulling() bool
+	AllowAutoPushing() bool
+	Run(branch string) ([]byte, error)
+}
+
+// NewCommand returns a new Command of the given type `t`.
+func NewCommand(t CommandType) Command {
+	switch t {
+	case CommandTypePull:
+		return NewPull()
+	case CommandTypePush:
+		return NewPush()
+	case CommandTypeInit:
+		return NewInit()
+	default:
+		log.Fatalf("'%s': command not supported")
+	}
+	return nil
+}
 
 // -----------------------------------------------------------------------------
 
-// Run runs a `Command` with the given context `c`.
+// Run runs the given command in the specified context `c`.
 func Run(cmd Command, c *cli.Context) {
 	branch := c.GlobalString("branch")
 	offline := c.GlobalBool("offline")
 
-	var output []byte
-	var err error
-	switch cmd {
-	case CommandPull:
-		output, err = NewPull(branch).Run()
-	case CommandPush:
-		if err := autoPull(branch, offline); err != nil {
-			log.Fatal(err)
-		}
-		output, err = NewPush(branch).Run()
-	case CommandInit:
-		output, err = NewInit(branch).Run()
+	if !offline && cmd.AllowAutoPulling() {
+		Run(NewPull(), c)
 	}
 
+	output, err := cmd.Run(branch)
 	if err != nil {
-		log.Fatal(err)
+		os.Exit(1)
 	}
-	log.Printf("%s\n", output)
+	if len(output) > 0 {
+		fmt.Printf("[FastForward] %s\n", output)
+	}
 
-	if err := autoPush(branch, offline); err != nil {
-		log.Fatal(err)
+	if cmd.AllowAutoPushing() {
+		Run(NewPush(), c)
 	}
-}
-
-func autoPull(branch string, offline bool) error {
-	if offline {
-		return nil
-	}
-	_, err := NewPull(branch).Run()
-	return err
-}
-
-func autoPush(branch string, offline bool) error {
-	if offline {
-		return nil
-	}
-	_, err := NewPush(branch).Run()
-	return err
 }
