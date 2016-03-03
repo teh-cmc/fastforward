@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/teh-cmc/forward"
+	"github.com/teh-cmc/fastforward"
 )
 
 // -----------------------------------------------------------------------------
@@ -12,15 +12,15 @@ var app *cli.App
 func init() {
 	app = cli.NewApp()
 
-	app.Name = "Forward"
+	app.Name = "FastForward"
 	app.HelpName = app.Name
 	app.Version = "0.0.1"
-	app.Usage = "Kanban-like tool built on git, designed for small teams that need to move fast."
+	app.Usage = "Decentralized Kanban tool built upon git, designed for small teams that need to move fast."
 
 	app.Commands = []cli.Command{
 		{
 			Name:            "init",
-			Usage:           "initializes a new Forward kanban repository",
+			Usage:           "initializes the FastForward branch",
 			ArgsUsage:       "<path> (defaults to current directory)",
 			SkipFlagParsing: true,
 			Action:          func(c *cli.Context) { forward.Init(c) },
