@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/codegangsta/cli"
@@ -28,32 +27,42 @@ func Run(cmd Command, c *cli.Context) {
 	branch := c.GlobalString("branch")
 	offline := c.GlobalBool("offline")
 
-	if cmd != CommandInit && !offline {
-		if _, err := NewPull(branch).Run(); err != nil {
-			log.Fatal(err)
-		}
-	}
-
 	var output []byte
 	var err error
 	switch cmd {
+	case CommandPull:
+		output, err = NewPull(branch).Run()
+	case CommandPush:
+		if err := autoPull(branch, offline); err != nil {
+			log.Fatal(err)
+		}
+		output, err = NewPush(branch).Run()
 	case CommandInit:
-		output, err = runInit(branch, c)
+		output, err = NewInit(branch).Run()
 	}
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("%s\n", output)
-	if !offline {
-		if _, err := NewPush(branch).Run(); err != nil {
-			log.Fatal(err)
-		}
+
+	if err := autoPush(branch, offline); err != nil {
+		log.Fatal(err)
 	}
 }
 
-func runInit(branch string, c *cli.Context) ([]byte, error) {
-	_, err := NewInit(branch).Run()
-	output := fmt.Sprintf("FastForward branch '%s' successfully initialized.", branch)
-	return []byte(output), err
+func autoPull(branch string, offline bool) error {
+	if offline {
+		return nil
+	}
+	_, err := NewPull(branch).Run()
+	return err
+}
+
+func autoPush(branch string, offline bool) error {
+	if offline {
+		return nil
+	}
+	_, err := NewPush(branch).Run()
+	return err
 }

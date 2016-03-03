@@ -1,6 +1,10 @@
 package commands
 
-import "github.com/teh-cmc/fastforward/git"
+import (
+	"fmt"
+
+	"github.com/teh-cmc/fastforward/git"
+)
 
 // -----------------------------------------------------------------------------
 
@@ -23,4 +27,8 @@ func (i Init) Template() []byte { return nil }
 func (i Init) Command() []string { return []string{"checkout", "-b", i.branch} }
 
 // Init implements the `fwd init` command.
-func (i Init) Run() ([]byte, error) { return git.Run(i) }
+func (i Init) Run() ([]byte, error) {
+	_, err := git.Run(i)
+	output := fmt.Sprintf("FastForward branch '%s' successfully initialized.", i.branch)
+	return []byte(output), err
+}
