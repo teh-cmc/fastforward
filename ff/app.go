@@ -17,6 +17,13 @@ func init() {
 	app.Version = "0.0.1"
 	app.Usage = "Decentralized Kanban tool built upon git, designed for small teams that need to move fast."
 
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:   "offline, o",
+			Usage:  "enables offline mode (diables auto-pulling & auto-pushing)",
+			EnvVar: "FF_OFFLINE",
+		},
+	}
 	app.Commands = []cli.Command{
 		{
 			Name:            "init",
