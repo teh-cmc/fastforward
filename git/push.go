@@ -12,8 +12,14 @@ func NewPush(branch string) *Push { return &Push{branch: branch} }
 
 // -----------------------------------------------------------------------------
 
-// Template always returns `nil`.
-func (p Push) Template() []byte { return nil }
+// AllowAutoCheckout always returns true.
+func (c Push) AllowAutoCheckout() bool { return true }
 
-// Command returns a command that pushes `p.branch`.
+// Input always returns `nil`.
+func (p Push) Input() []byte { return nil }
+
+// Command returns a `git push` command.
 func (p Push) Command() []string { return []string{"push", "origin", p.branch} }
+
+// Transform does nothing.
+func (p Push) Transform(output []byte) []byte { return output }
