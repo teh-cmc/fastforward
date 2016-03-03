@@ -13,7 +13,7 @@ func NewPull(branch string) *Pull { return &Pull{branch: branch} }
 // -----------------------------------------------------------------------------
 
 // Template always returns `nil`.
-func (i Pull) Template() []byte { return nil }
+func (p Pull) Template() []byte { return nil }
 
-// Command returns a command that pulls `i.branch`.
-func (i Pull) Command() []string { return []string{"pull", "--rebase", i.branch} }
+// Command returns a command that pulls `p.branch`.
+func (p Pull) Command() []string { return []string{"pull", "--rebase", p.branch} }
