@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/teh-cmc/fastforward"
 	"github.com/teh-cmc/fastforward/commands"
 )
 
@@ -33,36 +32,43 @@ func init() {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:      "init",
-			Usage:     "initializes the FastForward branch",
-			ArgsUsage: "<path> (defaults to current directory)",
-			Action:    func(c *cli.Context) { forward.Init(c) },
+			Name:  "init",
+			Usage: "initializes the FastForward branch",
+			Action: func(c *cli.Context) {
+				commands.Run(commands.NewCommand(commands.CommandTypeInit), c)
+			},
 		},
 		{
-			Name:   "pull",
-			Usage:  "pulls the FastForward branch",
-			Action: commands.Run(commands.Pull, c),
+			Name:  "pull",
+			Usage: "pulls the FastForward branch",
+			Action: func(c *cli.Context) {
+				commands.Run(commands.NewCommand(commands.CommandTypePull), c)
+			},
 		},
 		{
-			Name:   "push",
-			Usage:  "pushes the FastForward branch",
-			Action: commands.Run(commands.Push, c),
+			Name:  "push",
+			Usage: "pushes the FastForward branch",
+			Action: func(c *cli.Context) {
+				commands.Run(commands.NewCommand(commands.CommandTypePush), c)
+			},
 		},
 		{
-			Name:            "task",
-			Usage:           "task related sub-commands",
-			SkipFlagParsing: true,
+			Name:  "task",
+			Usage: "task related sub-commands",
 			Subcommands: []cli.Command{
 				{
-					Name:            "new",
-					Usage:           "creates a new task",
-					SkipFlagParsing: true,
-					Action:          func(c *cli.Context) { forward.TaskNew(c) },
+					Name:  "new",
+					Usage: "creates a new task",
+					Action: func(c *cli.Context) {
+						commands.Run(commands.NewCommand(commands.CommandTypeTaskNew), c)
+					},
 				},
 				{
-					Name:   "list",
-					Usage:  "lists tasks",
-					Action: func(c *cli.Context) { forward.TaskList(c) },
+					Name:  "list",
+					Usage: "lists tasks",
+					Action: func(c *cli.Context) {
+						commands.Run(commands.NewCommand(commands.CommandTypeTaskList), c)
+					},
 				},
 			},
 		},
