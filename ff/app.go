@@ -40,8 +40,13 @@ func init() {
 		},
 		{
 			Name:   "pull",
-			Usage:  "synchronizes the FastForward branch",
+			Usage:  "pulls the FastForward branch",
 			Action: commands.Run(commands.Pull, c),
+		},
+		{
+			Name:   "push",
+			Usage:  "pushes the FastForward branch",
+			Action: commands.Run(commands.Push, c),
 		},
 		{
 			Name:            "task",
