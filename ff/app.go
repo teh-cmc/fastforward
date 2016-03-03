@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/codegangsta/cli"
 	"github.com/teh-cmc/fastforward"
+	"github.com/teh-cmc/fastforward/commands"
 )
 
 // -----------------------------------------------------------------------------
@@ -32,11 +33,15 @@ func init() {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:            "init",
-			Usage:           "initializes the FastForward branch",
-			ArgsUsage:       "<path> (defaults to current directory)",
-			SkipFlagParsing: true,
-			Action:          func(c *cli.Context) { forward.Init(c) },
+			Name:      "init",
+			Usage:     "initializes the FastForward branch",
+			ArgsUsage: "<path> (defaults to current directory)",
+			Action:    func(c *cli.Context) { forward.Init(c) },
+		},
+		{
+			Name:   "pull",
+			Usage:  "synchronizes the FastForward branch",
+			Action: commands.Run(commands.Pull, c),
 		},
 		{
 			Name:            "task",

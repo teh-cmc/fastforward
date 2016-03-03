@@ -1,4 +1,4 @@
-package forward
+package commands
 
 import (
 	"fmt"
