@@ -40,6 +40,6 @@ func (i Init) Run(branch string) ([]byte, error) {
 	if err != nil {
 		return output, err
 	}
-	output = []byte(fmt.Sprintf("branch '%s' successfully initialized.", branch))
+	output = []byte(fmt.Sprintf("branch '%s' successfully initialized.\n", branch))
 	return output, nil
 }

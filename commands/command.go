@@ -66,7 +66,7 @@ func Run(cmd Command, c *cli.Context) {
 		os.Exit(1)
 	}
 	if len(output) > 0 {
-		fmt.Printf("[FastForward] %s\n", output)
+		fmt.Printf("[FastForward] %s", output)
 	}
 
 	if cmd.AllowAutoPushing() {
