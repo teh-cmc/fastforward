@@ -63,7 +63,7 @@ type CommitMessage struct {
 func (cm CommitMessage) Bytes() []byte {
 	var msg string
 	msg += fmt.Sprintf("[FastForward] %s > %s", cm.command, cm.title) +
-		"\n" + cm.description + "\n"
+		"\n\n" + cm.description + "\n\n"
 	for a, vs := range cm.attributes {
 		msg += a + ":" + strings.Join(vs, ",") + "\n"
 	}
@@ -73,6 +73,7 @@ func (cm CommitMessage) Bytes() []byte {
 // NewMessage parses `b` and returns a new CommitMessage.
 func NewMessage(c Commitable, b []byte) (*CommitMessage, error) {
 	cm := &CommitMessage{}
+	cm.attributes = make(map[string][]string)
 	scanner := bufio.NewScanner(bytes.NewReader(b))
 	i := 0
 	for scanner.Scan() {
