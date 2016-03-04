@@ -42,6 +42,8 @@ func NewCommand(t CommandType) Command {
 		return NewPush()
 	case CommandTypeInit:
 		return NewInit()
+	case CommandTypeTaskNew:
+		return NewTaskNew()
 	default:
 		log.Fatalf("'%s': command not supported")
 	}
