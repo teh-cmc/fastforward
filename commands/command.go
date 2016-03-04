@@ -63,6 +63,7 @@ func Run(cmd Command, c *cli.Context) {
 
 	output, err := cmd.Run(branch)
 	if err != nil {
+		fmt.Println("[fastforward]", err)
 		os.Exit(1)
 	}
 	if len(output) > 0 {
