@@ -32,17 +32,18 @@ type CommitMetadata struct {
 	cDate, cModified, sModified time.Time
 }
 
+// NewMetadata parses `b` and returns a new CommitMetadata.
+func NewMetadata(b []byte) (*CommitMetadata, error) { return nil, nil }
+
 // -----------------------------------------------------------------------------
 
 var (
-	regexCommitTitle      *regexp.Regexp
-	regexCommitCommand    *regexp.Regexp
-	regexCommitAttributes *regexp.Regexp
+	regexCommitCommandTitle *regexp.Regexp
+	regexCommitAttributes   *regexp.Regexp
 )
 
 func init() {
-	regexCommitTitle = regexp.MustCompile(`^\[FastForward\] ((?:[a-z]+:?)+) > (.*)$`)
-	regexCommitCommand = regexp.MustCompile(`^((?:[a-z]+:?)+)$`)
+	regexCommitCommandTitle = regexp.MustCompile(`^\[FastForward\] ((?:[a-z]+:?)+) > (.*)$`)
 	regexCommitAttributes = regexp.MustCompile(`^([a-zA-Z0-9\-_]+):((?:[a-zA-Z0-9\-_]+,?)*)$`)
 }
 
@@ -71,7 +72,7 @@ func (cm CommitMessage) Bytes() []byte {
 }
 
 // NewMessage parses `b` and returns a new CommitMessage.
-func NewMessage(c Commitable, b []byte) (*CommitMessage, error) {
+func NewMessage(b []byte) (*CommitMessage, error) {
 	cm := &CommitMessage{}
 	cm.attributes = make(map[string][]string)
 	scanner := bufio.NewScanner(bytes.NewReader(b))
@@ -90,16 +91,17 @@ func NewMessage(c Commitable, b []byte) (*CommitMessage, error) {
 			continue
 		}
 
-		// i == 0 -> title + command
+		// i == 0 -> command + title
 		if i == 0 {
 			if cm.title != "" {
 				return nil, fmt.Errorf("multi-lines title are forbidden")
 			}
-			cm.command = c.Command()
-			if !regexCommitCommand.MatchString(cm.command) {
-				return nil, fmt.Errorf("'%s': invalid command", cm.command)
+			if !regexCommitCommandTitle.Match(line) {
+				return nil, fmt.Errorf("'%s': invalid command/title", line)
 			}
-			cm.title = string(line)
+			values := regexCommitCommandTitle.FindStringSubmatch(string(line))
+			cm.command = values[1]
+			cm.title = values[2]
 			if len(cm.title) > 80 {
 				cm.title = cm.title[:80]
 			}
@@ -118,7 +120,7 @@ func NewMessage(c Commitable, b []byte) (*CommitMessage, error) {
 				return nil, fmt.Errorf("'%s': invalid attributes", line)
 			}
 			attr := regexCommitAttributes.FindStringSubmatch(string(line))
-			cm.attributes[attr[0]] = strings.Split(attr[1], ",")
+			cm.attributes[attr[1]] = strings.Split(attr[2], ",")
 		}
 	}
 
@@ -172,5 +174,7 @@ func EditMessage(c Commitable) (*CommitMessage, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewMessage(c, output)
+	output = []byte(fmt.Sprintf("[FastForward] %s > ", c.Command()) + string(output))
+
+	return NewMessage(output)
 }
