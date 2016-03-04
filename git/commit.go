@@ -17,14 +17,16 @@ func NewCommit(branch string, msg *forward.CommitMessage) *Commit {
 
 // -----------------------------------------------------------------------------
 
-// AllowAutoCheckout always returns true.
+// AllowAutoCheckout always returns `true`.
 func (c Commit) AllowAutoCheckout() bool { return true }
 
 // Input returns the associated commit message.
 func (c Commit) Input() []byte { return c.msg.Bytes() }
 
 // Command returns a `git commit` command.
-func (c Commit) Command() []string { return []string{"commit", "--allow-empty", "--file", "-"} }
+func (c Commit) Command() []string {
+	return []string{"commit", "--allow-empty", "--file", "-"}
+}
 
 // Transform does nothing.
 func (c Commit) Transform(output []byte) []byte { return output }

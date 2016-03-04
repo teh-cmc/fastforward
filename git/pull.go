@@ -12,8 +12,8 @@ func NewPull(branch string) *Pull { return &Pull{branch: branch} }
 
 // -----------------------------------------------------------------------------
 
-// AllowAutoCheckout always returns true.
-func (c Pull) AllowAutoCheckout() bool { return true }
+// AllowAutoCheckout always returns `false`.
+func (c Pull) AllowAutoCheckout() bool { return false }
 
 // Input always returns `nil`.
 func (p Pull) Input() []byte { return nil }

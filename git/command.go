@@ -35,7 +35,11 @@ func Run(c Command, branch string) ([]byte, error) {
 			return nil, err
 		}
 		defer func() {
+			if current == nil {
+				log.Fatalln("could't find current branch name")
+			}
 			if _, err := Run(NewBranch(BranchTypeSwitch, string(current)), branch); err != nil {
+				// NOTE: use Run()'s error
 				log.Fatal(err)
 			}
 		}()

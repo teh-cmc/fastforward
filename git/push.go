@@ -12,8 +12,8 @@ func NewPush(branch string) *Push { return &Push{branch: branch} }
 
 // -----------------------------------------------------------------------------
 
-// AllowAutoCheckout always returns true.
-func (c Push) AllowAutoCheckout() bool { return true }
+// AllowAutoCheckout always returns `false`.
+func (c Push) AllowAutoCheckout() bool { return false }
 
 // Input always returns `nil`.
 func (p Push) Input() []byte { return nil }

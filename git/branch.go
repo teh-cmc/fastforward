@@ -3,7 +3,6 @@ package git
 import (
 	"bufio"
 	"bytes"
-	"log"
 )
 
 // -----------------------------------------------------------------------------
@@ -33,7 +32,7 @@ func NewBranch(t BranchType, branch string) *Branch {
 
 // -----------------------------------------------------------------------------
 
-// AllowAutoCheckout always returns false.
+// AllowAutoCheckout always returns `false`.
 func (b Branch) AllowAutoCheckout() bool { return false }
 
 // Input always returns `nil`.
@@ -57,7 +56,6 @@ func (b Branch) Transform(output []byte) []byte {
 	if b.typ != BranchTypeCurrent {
 		return output
 	}
-
 	return branchExtractCurrent(output)
 }
 
@@ -69,6 +67,5 @@ func branchExtractCurrent(b []byte) []byte {
 			return txt[2:]
 		}
 	}
-	log.Fatal("couldn't determine current branch")
 	return nil
 }
