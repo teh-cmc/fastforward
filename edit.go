@@ -29,7 +29,7 @@ func Edit(prefix string, templates ...string) ([]byte, error) {
 		return nil, err
 	}
 	defer func() {
-		// NOTE: file removal might fail, not much we can do though.
+		// NOTE: file removal might fail, not much we can do though
 		if err := os.Remove(f.Name()); err != nil {
 			log.Println(err)
 		}

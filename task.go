@@ -20,7 +20,7 @@ const TemplateTaskNew = `
 # by an empty line. Names longer than 80 characters will be truncated.
 #
 # Lines starting with '#' will be ignored, and an empty message aborts the
-# creation of the Forward project.
+# creation of the task.
 `
 
 // -----------------------------------------------------------------------------
