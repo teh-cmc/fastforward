@@ -19,7 +19,7 @@ func (c Pull) AllowAutoCheckout() bool { return true }
 func (p Pull) Input() []byte { return nil }
 
 // Command returns a `git pull` command.
-func (p Pull) Command() []string { return []string{"pull", "--rebase", p.branch} }
+func (p Pull) Command() []string { return []string{"pull", "origin", p.branch} }
 
 // Transform does nothing.
 func (p Pull) Transform(output []byte) []byte { return output }
