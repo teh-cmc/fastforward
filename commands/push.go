@@ -12,8 +12,8 @@ func NewPush() *Push { return &Push{} }
 
 // -----------------------------------------------------------------------------
 
-// AllowAutoPulling always returns `false`.
-func (p Push) AllowAutoPulling() bool { return false }
+// AllowAutoPulling always returns `true`.
+func (p Push) AllowAutoPulling() bool { return true }
 
 // AllowAutoPushing always returns `false`.
 func (p Push) AllowAutoPushing() bool { return false }
