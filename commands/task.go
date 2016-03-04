@@ -29,6 +29,9 @@ func (t TaskNew) Run(branch string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	if cm == nil {
+		return []byte("Task creation aborted (empty commit message)."), nil
+	}
 	return git.Run(git.NewCommit(branch, cm), branch)
 }
 

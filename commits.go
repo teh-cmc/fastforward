@@ -118,6 +118,12 @@ func NewMessage(c Commitable, b []byte) (*CommitMessage, error) {
 			cm.attributes[attr[0]] = strings.Split(attr[1], ",")
 		}
 	}
+
+	// empty commit message, abort
+	if cm.title == "" {
+		return nil, nil
+	}
+
 	return cm, scanner.Err()
 }
 
