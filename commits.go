@@ -92,6 +92,9 @@ func NewMessage(c Commitable, b []byte) (*CommitMessage, error) {
 
 		// i == 0 -> title + command
 		if i == 0 {
+			if cm.title != "" {
+				return nil, fmt.Errorf("multi-lines title are forbidden")
+			}
 			cm.command = c.Command()
 			if !regexCommitCommand.MatchString(cm.command) {
 				return nil, fmt.Errorf("'%s': invalid command", cm.command)
